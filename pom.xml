@@ -12,7 +12,7 @@
         <relativePath/>
     </parent>
 
-
+    <!--debemos crear el groupId que se crea cuando creamos el pom.xml-->
     <groupId>com.maicol1912.microservice</groupId>
     <artifactId>microservice-new</artifactId>
     <packaging>pom</packaging>
@@ -25,6 +25,7 @@
         <module>inventory-service</module>
     </modules>
 
+    <!--este se crea cuando creamos el proyecto maven-->
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>

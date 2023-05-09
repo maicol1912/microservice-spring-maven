@@ -2,6 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!--debemos indicar cual es nuestro parent en este caso el parent es el proyecto padre que tiene el pom.xml-->
     <parent>
         <artifactId>microservice-new</artifactId>
         <groupId>com.maicol1912.microservice</groupId>
@@ -9,13 +11,16 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <!--artifact ID-->
     <artifactId>product-service</artifactId>
 
+    <!--Este se crea al crear el proyecto maven -->
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
     <!-- DEBEMOS DE COLOCAR LAS DEPENDENCIAS DEL PROYECTO DE MICROSERVICIO-->
     <dependencies>
         <dependency>
