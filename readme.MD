@@ -1,3 +1,5 @@
+## Configuration Microservices
+*************************************************************
 ### Crear maven Project / XML por cada microservicio
 * para cada microservicio debemos crear un proyecto maven
 * file -> new -> module 
@@ -28,3 +30,16 @@
 * nos vamos a la consola de maven y escribimos
 
               maven clean verified
+
+
+## Service discovery - Centralizar servicios
+*************************************************************
+### Funcion
+* cuando estamos trabajando de manera local trabajamos con localhost y sabemos en que puerto estan corriendo
+* cuando hacemos el despliegue las ips pueden ser dinamicas y cambiar
+* por lo tanto si quemamos la url esta puede cambiar y dañar nuestro servicio
+* o tambien podemos tener varias instancias de un microservicio, por lo tanto podemos enviar diferentes peticiones
+* a los diferntes instancias para hacer un load_balancer
+
+### Como funciona
+* los microservicios se registran en el service discovery y este maneja y puede categorizar cada api y sus instancias
