@@ -43,3 +43,8 @@
 
 ### Como funciona
 * los microservicios se registran en el service discovery y este maneja y puede categorizar cada api y sus instanciass
+* el service discovery trata de enviar las peticiones a los diferentes intsnacias, si todas no funcionan devuelve que el microservicio no esta disponible
+
+### Como se implementa
+* se crea un modulo de maven que se adjunta en el pom principal
+* alli en el pom del service se define que el principal es el parent
