@@ -42,4 +42,4 @@
 * a los diferntes instancias para hacer un load_balancer
 
 ### Como funciona
-* los microservicios se registran en el service discovery y este maneja y puede categorizar cada api y sus instancias
+* los microservicios se registran en el service discovery y este maneja y puede categorizar cada api y sus instanciass
