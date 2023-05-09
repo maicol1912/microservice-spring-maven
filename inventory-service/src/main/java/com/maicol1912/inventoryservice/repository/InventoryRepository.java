@@ -1,5 +1,6 @@
 package com.maicol1912.inventoryservice.repository;
 
+
 import com.maicol1912.inventoryservice.model.Inventory;
 import org.springframework.data.jpa.repository.JpaRepository;
 
