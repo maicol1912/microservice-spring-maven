@@ -27,7 +27,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     //* debemos usar la de la clase, y esta tomara la implementacion que ya hizimos en el webClitnConfig
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
 
     //* se recibe una lista de Ordenes
     public void placeOrder(OrderRequest orderRequest){
@@ -52,8 +52,9 @@ public class OrderService {
                                      .toList();
 
         //llama al servicio de inventory-service y mira si hay stock
-        InventoryResponse[] inventoryResponseArray = webClient.get()
-                 .uri("http://127.0.0.1:8082/api/inventory",
+        //* lo cambiamos por el build debido a las multiples instancias, de un microservicio, para poder hacerlo
+        InventoryResponse[] inventoryResponseArray = webClientBuilder.build().get()
+                 .uri("http://inventory-service/api/inventory",
                          //* definimos un uri builder y enviamos un param con nombre SkuCode y enviamos una lista
                          uriBuilder -> uriBuilder.queryParam("skuCode",skuCodes).build()
                  )

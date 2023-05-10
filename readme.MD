@@ -48,3 +48,29 @@
 ### Como se implementa
 * se crea un modulo de maven que se adjunta en el pom principal
 * alli en el pom del service se define que el principal es el parent
+
+### Configurar Eureka server
+* debemos configurar la clase principal del proyecto con el EnableEurekaServer
+* para configurar eureka se hace desde el application properties
+
+### Configurar Eureka client
+* para configurar eureka se hace desde el application properties
+* si solo nos conectamos con url los servicios se registran pero como uknown
+
+### Crear multiples instancias de EurekaClient
+* para crear una multiple instancia de un servicio
+* debemos colocarlo en el puerto 0, para que este tome un puerto libre
+* debemos activar el pararel run en intellij para poder crear varias instancias
+
+### Acceder a la url de los microservicios
+* ahora se accede por medio del nombre con el cual se registro en eureka server
+              
+                 http://inventory-service/api/inventory
+
+### Como es el funcionamiento de discovery service al caerse
+* cuando un microservicio ya esta registrado en discovery service y discovery service se detiene
+* los microservicios tienen la capacidad de seguir guardando la cache de los demas
+* entonces ya sabe donde redirigir la peticion
+
+* cuando un microservicio nuevo se va a registrar y el eureka service esta detenido
+* entonces este no puede registrarse, el microservicio se detiene

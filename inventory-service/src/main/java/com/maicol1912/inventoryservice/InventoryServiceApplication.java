@@ -6,9 +6,12 @@ import com.maicol1912.inventoryservice.service.InventoryService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
+//* sirve para definir que la aplicacion es un cliente de eureka para poderse conectarse al servidor eureka
+@EnableEurekaClient
 public class InventoryServiceApplication {
 
 	public static void main(String[] args) {
