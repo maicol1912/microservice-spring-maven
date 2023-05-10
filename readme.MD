@@ -74,3 +74,29 @@
 
 * cuando un microservicio nuevo se va a registrar y el eureka service esta detenido
 * entonces este no puede registrarse, el microservicio se detiene
+
+
+
+## Spring cloud gateway - api gateway
+*************************************************************
+* api gateway es un servicio que nos permite redireccionar las peticiones del cliente
+* hacia los diferentes microservicios dependiendo de su endpoint
+
+* tambien se puede realizar la authenticacion de peticiones
+* ademas se puede hacer load balancer con este 
+
+* este tambien debe de tener la dependencia de eureka client
+
+### Como funciona
+* en el archivo de properties definimos el id de la ruta, con el nombre de cada microservicio
+* despues definimos la url donde va a ir con el lb para hacer load balancer
+* y despues las rutas que se redireccionaran a dicho servicio en caso de que llegue un path especifico
+
+                spring.cloud.gateway.routes[1].id=order-service
+                spring.cloud.gateway.routes[1].uri=lb://order-service
+                spring.cloud.gateway.routes[1].predicates[0]=Path=/api/order
+
+### Redireccion de peticiones
+* al enviar un path especifico, este nos envia al nombre del servicio registrado en eureka-service
+* y envia la peticion completa, con su url, con su metodo, y su cuerpo
+* si probamos podemos consumir la api desde el api gateway o desde el mismo microservicio
