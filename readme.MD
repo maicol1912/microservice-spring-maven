@@ -1,4 +1,4 @@
-## Configuration Microservices
+# Configuration Microservices
 *************************************************************
 ### Crear maven Project / XML por cada microservicio
 * para cada microservicio debemos crear un proyecto maven
@@ -32,7 +32,7 @@
               maven clean verified
 
 
-## Service discovery - Centralizar servicios
+# Service discovery - Centralizar servicios
 *************************************************************
 ### Funcion
 * cuando estamos trabajando de manera local trabajamos con localhost y sabemos en que puerto estan corriendo
@@ -77,7 +77,7 @@
 
 
 
-## Spring cloud gateway - api gateway
+# Spring cloud gateway - api gateway
 *************************************************************
 * api gateway es un servicio que nos permite redireccionar las peticiones del cliente
 * hacia los diferentes microservicios dependiendo de su endpoint
@@ -102,7 +102,7 @@
 * si probamos podemos consumir la api desde el api gateway o desde el mismo microservicio
 
 
-## Seguridad de la aplicacion con KeyCloak
+# Seguridad de la aplicacion con KeyCloak
 ***********************************************
 ### KeyCloak
 * keycloak es una dependencia o proyecto que nos ayuda a mantener la seguridad de nuestros microservicios
@@ -190,7 +190,7 @@
                   eureka.client.serviceUrl.defaultZone=http://eureka:password@localhost:8761/eureka
 
 
-## Circuit Braker
+# Circuit Braker
 ***********************************************
 
 ### Que es?
@@ -222,7 +222,7 @@ en el archivo de properties definimos todas estas caracteristicaz
 
 
 
-## Distributed Tracing
+# Distributed Tracing
 ***********************************************
 
 Distributed tracing en microservicios de Spring se refiere a la capacidad de rastrear y analizar el flujo de solicitudes que se producen entre los diferentes componentes de un sistema de microservicios, que se ejecutan en distintos nodos o servidores.
@@ -280,3 +280,46 @@ Distributed tracing en microservicios de Spring se refiere a la capacidad de ras
 * este log de zipkin nos muestra el flujo que cumplio la peticion, como por ejemplo el flujo que paso desde api-gateway al order service y despues al product service 
 
 * este nos muestra un spanId y por medio de este spanId podemos buscarlo en el log y ver mas detalle de este error
+
+* tambein podemos definir un span en nuestros servicios, con un nombre definido
+* para que en los logs salga este, y podamos diferenciarlo
+
+# Event driven with Kafka
+***********************************************
+
+* para el uso de kafka vamos a usar kafka confluent
+* https://developer.confluent.io/quickstart/kafka-docker/
+
+* debemos copiarnos el archivo .yml y crearlo al inicio de nuestra carpeta  
+
+## Dependencias
+* tener kafka corriendo como contenedor
+
+                      <dependency>
+                        <groupId>org.springframework.kafka</groupId>
+                        <artifactId>spring-kafka</artifactId>
+                        <version>2.9.0</version>
+                      </dependency>
+* despues debemos agregar en el propertie hacia que direccion ip y puerto esta corriendo kafka
+* en caso de que sea un producer debemos configurar las caracteristicaz para producer
+
+                      #Kafka Properties
+                      spring.kafka.bootstrap-servers=localhost:9092
+
+                      #este es para que kafka sepa como debemos de serializar la key y enviarla a kafka broker en este caso este value sera un String
+                      spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+
+                      #este es para que kafka sepa como debemos de serializar el value y enviarla a kafka broker en este caso este value sera un JSON
+                      spring.kafka.producer.value-serializer=org.apache.kafka.common.serialization.StringSerializer
+
+* si es un consumer debemos crear las caracteristicaz para un consumer
+* aca iria consumer y deserializer
+
+                      spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+                      spring.kafka.consumer.value-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+
+* para poder Usar las entidades que llegan o se envian en los kafka cluster
+* debemos definir el mdelo de mapping tanto en el consumer como el producer
+                      
+                      # aca definimos un tipo de mapping en este caso el modelo de Order placed que llega que seria la ubicacion del modelo OrderPlacedEvent, esto se debe hacer en el consumer como en el producer
+                      spring.kafka.producer.properties.spring.json.type.mapping=event:com.maicol1912.orderservice.event.OrderPlacedEvent

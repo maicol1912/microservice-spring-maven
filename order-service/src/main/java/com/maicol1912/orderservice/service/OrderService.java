@@ -4,6 +4,7 @@ package com.maicol1912.orderservice.service;
 import com.maicol1912.orderservice.dto.InventoryResponse;
 import com.maicol1912.orderservice.dto.OrderLineItemsDto;
 import com.maicol1912.orderservice.dto.OrderRequest;
+import com.maicol1912.orderservice.event.OrderPlacedEvent;
 import com.maicol1912.orderservice.model.Order;
 import com.maicol1912.orderservice.model.OrderLineItems;
 import com.maicol1912.orderservice.repository.OrderRepository;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.sleuth.Span;
 import org.springframework.cloud.sleuth.Tracer;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -31,6 +33,10 @@ public class OrderService {
     //* debemos usar la de la clase, y esta tomara la implementacion que ya hizimos en el webClitnConfig
     private final WebClient.Builder webClientBuilder;
     private final Tracer tracer;
+    //* debemos inyectar esta dependencia para poder usar kafka
+    //* estamos definiendo que la llave es string, en este caso el topico, y una clase de tipo OrderPlaced que es la que se va a enviar
+    private final KafkaTemplate<String,OrderPlacedEvent> kafkaTemplate;
+
     //* se recibe una lista de Ordenes
     public String placeOrder(OrderRequest orderRequest){
         //* instanciamos un objeto de tipo ORDER
@@ -80,6 +86,9 @@ public class OrderService {
 
             }
             orderRepository.save(order);
+            //*aca estamos enviando un numero de orden al topico de notificationTopic
+            //* enviamos una clase completa al topico
+            kafkaTemplate.send("notificationTopic",new OrderPlacedEvent(order.getOrderNumber()));
             return "Order Placed Successfully";
         }finally {
             inventoryServiceLookup.end();
