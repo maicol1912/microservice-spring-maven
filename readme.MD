@@ -222,3 +222,61 @@ en el archivo de properties definimos todas estas caracteristicaz
 
 
 
+## Distributed Tracing
+***********************************************
+
+Distributed tracing en microservicios de Spring se refiere a la capacidad de rastrear y analizar el flujo de solicitudes que se producen entre los diferentes componentes de un sistema de microservicios, que se ejecutan en distintos nodos o servidores.
+
+* en aplicaciones en dev es facil ver los logs pero en aplicaciones en produccion con muchas solicitued y logs se vuelve dificil
+* si algun request falla en algun punto o parte del proceso sabremos que esta mal y donde esta mal 
+
+### Dependencias necesarias
+* debemos usar 2 dependencias una es sleuth para el siguimietndo de erroes y la otra zikpin para una interfaz grafica de sleuth
+
+                    <!--esta dependencia es para trabajr con el distributed tracing para ver donde fallaron las app-->
+                    <dependency>
+                      <groupId>org.springframework.cloud</groupId>
+                      <artifactId>spring-cloud-starter-sleuth</artifactId>
+                    </dependency>
+
+                    <!--depedencia para tabajr con una interfz grafica de sleuth-->
+                    <dependency>
+                      <groupId>org.springframework.cloud</groupId>
+                      <artifactId>spring-cloud-sleuth-zipkin</artifactId>
+                    </dependency>
+
+### Inslatar zipkin
+* se necesita un contenedor de docker corriendo lo cual lo hacemos con el comando 
+
+                    docker run -d -p 9411:9411 openzipkin/zipkin
+
+### Configuracion sleuth
+* debemos configurar el aplication.properties 
+
+                    #Cofiguracion sleuth y zipkin
+                    spring.zipkin.base-url=http://localhost:94911
+                    #hacemos el 100% de las peticiones hagan trace
+                    spring.sleuth.sampler.probability= 1.0
+
+### Con esta configuracion los logs de las aplicaciones tienen, el nombre del servicio, pero seguidos de IDs unicos para poder identificar dichas peticiones
+
+
+## Panel de control de zipkin
+* para esto debemos entrar al localhost y al puerto donde se esta corriendo 
+                    
+                    http://localhost:9411/zipkin/
+* aca debemos darle a run query
+* en el panel de control,se pueden ver las ejeuciones de request que fallaron
+* al entrar alli muestra que servicios estuviron implicitos
+* al entrar a la peticion, spans es el numero de intentos 
+* y aca nos muestra informacion de la peticion, status, mensaje error
+
+
+* tambien podemosa acceder a las peticiones buenas
+* debemos modificar el limit de la consulta
+* las verdes son las que se realizaron bien, y las rojas las que tuvieron error 
+
+### Flujo 
+* este log de zipkin nos muestra el flujo que cumplio la peticion, como por ejemplo el flujo que paso desde api-gateway al order service y despues al product service 
+
+* este nos muestra un spanId y por medio de este spanId podemos buscarlo en el log y ver mas detalle de este error
