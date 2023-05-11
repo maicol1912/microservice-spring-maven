@@ -30,7 +30,7 @@ public class OrderService {
     private final WebClient.Builder webClientBuilder;
 
     //* se recibe una lista de Ordenes
-    public void placeOrder(OrderRequest orderRequest){
+    public String placeOrder(OrderRequest orderRequest){
         //* instanciamos un objeto de tipo ORDER
         Order order = new Order();
         //* le definimos un id a la orden
@@ -69,8 +69,10 @@ public class OrderService {
 
         if(!allProductsInStock){
             throw new IllegalArgumentException("Product is not in stock, please try again later");
+
         }
         orderRepository.save(order);
+        return "Order Placed Successfully";
     }
 
     private OrderLineItems mapToDto(OrderLineItemsDto orderLineItemsDto){

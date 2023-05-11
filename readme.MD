@@ -188,3 +188,37 @@
 * por medio de la definicion de un usuario:password
 
                   eureka.client.serviceUrl.defaultZone=http://eureka:password@localhost:8761/eureka
+
+
+## Circuit Braker
+***********************************************
+
+### Que es?
+* al tener microservicios, y al hacer llamadas entre ellos, pueden suceder problemas
+* como que el microservicio no esta disponible, por lo tanto esto afectara el funcionamiento de nuestra app
+* lo que se busca con circuit braker es cuando falla un microservicio, inmediatamente responder con un mensaje de caida de este
+* ademas si un microservicio no esta funcionando, para las llamadas ya que no tiene sentido seguir llamando ese microservicio
+* ademas podemos usar el cache de los otros microservicios, mientras estos no esten funcionando 
+* para esto sera usado RESILIENCE4J
+
+### Estados de circuit Bracker
+En el estado cerrado:  el circuit breaker permite el flujo normal de tráfico, permitiendo que las solicitudes pasen a través de él sin interrupciones. Si alguna de estas solicitudes falla, el circuit breaker registra el error. Si la tasa de error de las solicitudes excede un umbral predefinido, el circuit breaker pasa al estado abierto.
+En el estado abierto, el circuit breaker deja de permitir que las solicitudes pasen a través de él y comienza a responder inmediatamente con una respuesta de error. Durante un período de tiempo predefinido, el circuit breaker mantiene esta respuesta de error y no permite el flujo de tráfico a través de él. Una vez que se alcanza el final del período de tiempo, el circuit breaker pasa al estado semiabierto.
+En el estado semiabierto, el circuit breaker permite un flujo limitado de tráfico a través de él. Durante este estado, el circuit breaker monitorea la tasa de error de las solicitudes que pasan a través de él. Si la tasa de error sigue siendo alta, el circuit breaker vuelve al estado abierto. Si la tasa de error baja por debajo del umbral predefinido, el circuit breaker vuelve al estado cerrado y permite el flujo normal de tráfico a través de él.
+
+en el archivo de properties definimos todas estas caracteristicaz
+## Ver estado de un microservicio
+* podemos acceder al estado de un microservicio, para saber si esta corriendo o no
+* se debe colocar la ip y el puerto donde esta corriendo y el /actuator/health
+* este debe tener implementado el circuit braker
+
+                  http://localhost:8081/actuator/health
+
+
+### Conclusion
+* hay una anotacion para el control de errores que es @CircuitBraker
+* hay una anotacion para definir un tiempo limite en que una peticion puede tardar en responde @TimeLimitter
+* hay una anotacion para definir el numero de intentos antes de que la app lanze un error
+
+
+
