@@ -100,3 +100,91 @@
 * al enviar un path especifico, este nos envia al nombre del servicio registrado en eureka-service
 * y envia la peticion completa, con su url, con su metodo, y su cuerpo
 * si probamos podemos consumir la api desde el api gateway o desde el mismo microservicio
+
+
+## Seguridad de la aplicacion con KeyCloak
+***********************************************
+### KeyCloak
+* keycloak es una dependencia o proyecto que nos ayuda a mantener la seguridad de nuestros microservicios
+
+### Instalar Keycloak
+* para instalar keycloak lo podemos hacer por medio de docker corriendo este comando
+  
+
+                docker run -p 8181:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:18.0.0 start-dev
+
+### Configurar Keycloak
+* despues de instalarlo debemos ir al localhost y el puerto en el que esta corriendo 
+* colocar las credenciales que definimos al correr el contenedor de docker
+* debemos crear otro realme 
+* despues debemos crear un cliente, debemos agregar la propiedad client-id y de tipo openid-connect
+* en la siguiente pantalla debemos modificar el AccessType por confidential ,debemos desactivar el direct access grant,debemos desactivar el Standard Flow Enabled, debemos activar el service accounts enabled
+
+* despues de crear el client, podemos ver en credencial la credencial secret
+* debemos ir al realm settings y en endpoints debemos abrir OpenID Endpoint Configuration
+* debemos copiar el objeto de issuer que es un endpoint
+
+#### la url que copiamos del issuer la usaremos en nuestro proyecto despues
+
+### Dependencias en Api gateway
+* en api gateway debemos descargar las siguientes dependencias
+
+                <dependency>
+                  <groupId>org.springframework.boot</groupId>
+                  <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+                </dependency>
+
+                <!--dependencia para usar Oauth con keycloak-->
+                <dependency>
+                  <groupId>org.springframework.boot</groupId>
+                  <artifactId>spring-boot-starter-security</artifactId>
+                </dependency>
+* en el aplication de nuestra api gateway debemos definir una propiedad con el valor de la variable issuer
+
+
+                spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:8181/realms/spring-boot-microservices-realm
+
+* despues debemos crear una clase de securityConfig en el api gateway para saber como se comporta y como debe de manejar la authenticacion en la app
+* ahora al definir la autenticacfion al tratar de acceder a los endpoints por medio de api-gateway nos dira Unauthorized
+
+### Configurar Token OAuth 2.0
+* en postman debemos ir a Authorization, debemos buscar OAuth 2.0
+                
+                Token Name: token
+                Grant Type: Client Credentials
+                Access Token URL: en el archivo de donde tomamos el issuer, en keycloak tomamos el valor del objeto "token_endpoint"
+                Client ID: el client-id que definimos en keycloak al crear el cliente
+                Client Secret: el secret de keycloak que se ve en el client y las credenciales
+                Scope: openid offline_access
+                Client Authentication: Send as basic auth header
+
+* al colocar todos los datos correctamente le damos en get token
+* este nos devuelve un token 
+
+* despues de tener el access token 
+* en la parte superior de OAuth 2.0 debemos llenar asi los valores
+
+                 Token: nombre del token creado, se agrega automaticamente
+                 despues debemos pegar el token generado
+                 Header Prefix: Bearer 
+
+#### al enviar la peticion con este Authorization y este token, tendremos acceso a el Api-gateway
+#### el servicio de keycloak puede estar caido para hacer el login con el token, pero debe estar corriendo para la creacion de clientes
+
+
+## Configurar discovery Service con la authenticacion de api-gateway
+* en el discovery service, debemos definir una clase de SecurityConfig donde se configurara una authenticacion por medio de user y password
+* debemos instalar la siguiente depedencia en el discovery service
+
+                  <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-security</artifactId>
+                  </dependency>
+* como eureka service necesita authenticacion, los microservicios no se pueden conectar eureka server
+* al definir el archivo de SecurityConfig en el eureka server, nos despliega una pantalla con usuario y contraseña
+
+### Conectarse a eurekaServer desde microservicios con authenticacion
+* en el aplication properties debemos cambiar la forma de conectarnos al eureka ahora se debe hacer de la siguiente manera
+* por medio de la definicion de un usuario:password
+
+                  eureka.client.serviceUrl.defaultZone=http://eureka:password@localhost:8761/eureka
