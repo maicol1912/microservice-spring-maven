@@ -10,7 +10,6 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-//* sirve para definir que la aplicacion es un cliente de eureka para poderse conectarse al servidor eureka
 @EnableEurekaClient
 public class InventoryServiceApplication {
 
@@ -18,9 +17,6 @@ public class InventoryServiceApplication {
 		SpringApplication.run(InventoryServiceApplication.class, args);
 	}
 
-	//* este bean se correra apenas la aplicacion se inicie
-	//* lo que hace es que inyecta un repository para poder hacer guardado de datos alli
-	//* srive para mockear datos en la base de datos
 	@Bean
 	public CommandLineRunner loadData(InventoryRepository inventoryRepository){
 		return args -> {

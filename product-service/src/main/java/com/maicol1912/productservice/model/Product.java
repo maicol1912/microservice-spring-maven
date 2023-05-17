@@ -10,15 +10,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 
-//* este es la forma de declarar tablas en mongoDB
 @Document(value = "product")
-//* generar constructor con todos los argumentos
 @AllArgsConstructor
-//* construir contrcutor sin argumentos
 @NoArgsConstructor
-//* para instanciar objetos por medio de builder
 @Builder
-//* para crear los metodos getter y setter
 @Data
 public class Product {
     @Id

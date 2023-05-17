@@ -13,17 +13,13 @@ public class SecurityConfig {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity serverHttpSecurity){
-        //* la primera configuracion desabilitamos el csrf que no es necesario si se usa con JWTa
         serverHttpSecurity.csrf()
                           .disable()
                 .authorizeExchange(exchange  -> exchange
-                         //* aca se definen las rutas que son libres de autenticacion
                         .pathMatchers("/eureka/**")
                         .permitAll()
-                         //* aca dice que cualquier ruta que no entre en el patMatcher necesitara estar authenticada
                         .anyExchange()
                         .authenticated())
-                //* y aca definimos que se debe de usar JWT como mecanismo de autenticacion
                 .oauth2ResourceServer(ServerHttpSecurity.OAuth2ResourceServerSpec::jwt);
         return serverHttpSecurity.build();
     }

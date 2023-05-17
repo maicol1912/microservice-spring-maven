@@ -10,7 +10,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//* lo que hace este Objeto es recibir una lista de Ordenes
 public class OrderRequest {
     private List<OrderLineItemsDto>orderLineItemsDtoList;
 }

@@ -24,17 +24,8 @@ public class OrderController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    //* le llamamos circuit bracker de inventory
-    //* llamamos a un metodo que definimos abajo como fallback que es la respuesta
     @CircuitBreaker(name="inventory",fallbackMethod = "fallbackMethod")
-    //* el name debe ir deacuerdo al nombre que definimos en las propierdades de application properties .instances.inventory
-
-    //*establece un límite de tiempo para la ejecución de un método en este caso definido en el properties resilience4j.timelimiter.instances.inventory.timeoutDuration
     @TimeLimiter(name="inventory")
-    //* este recibe una lista de ordenes
-    //*  el CompletableFuture define algo futuro, ya que la respuesta puede ser asincrona dentro del tiempo definido en el TimeLimiter
-
-    //* el retry define el numero de intentos que hace a un lugar antes de lanzar un errot, toma los valores definidos en el properties resilience4j.retry.instances.inventory.maxAttempts
     @Retry(name="inventory")
     public CompletableFuture<String> placeOrder(@RequestBody OrderRequest orderRequest){
         return CompletableFuture.supplyAsync(()->orderService.placeOrder(orderRequest));

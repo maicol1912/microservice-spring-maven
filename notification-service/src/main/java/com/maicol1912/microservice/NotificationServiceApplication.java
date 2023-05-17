@@ -14,8 +14,6 @@ public class NotificationServiceApplication {
         SpringApplication.run(NotificationServiceApplication.class, args);
     }
 
-    //* un kafkaListener es algo que se ejcuta cuando llega un mensjae a un topico
-    //* cuando un mensaje llega a un topico esto se ejecuta, sabemos que llegara un OrderPlaced ya que lo definimos desde el producer
     @KafkaListener(topics = "notificationTopic")
     public void handleNotification(OrderPlacedEvent orderPlacedEvent){
         //send out an email notification

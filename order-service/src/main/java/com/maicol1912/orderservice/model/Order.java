@@ -13,11 +13,8 @@ import java.util.List;
 //* para crear una clase en mysql
 @Entity
 @Table(name= "t_orders")
-//* getter de las clases
 @Getter
-//* setter de las clases
 @Setter
-//* constructor y no constructor
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {

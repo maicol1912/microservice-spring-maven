@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-//* Objeto de Items que almacena la lista de OrderRequest
 public class OrderLineItemsDto {
 
     private Long id;

@@ -17,15 +17,10 @@ import java.util.List;
 public class InventoryService {
 
     private final InventoryRepository inventoryRepository;
-    //* el metodo sera transaccional, es decir se ejecuta todo lo declarado o nada
 
     @Transactional(readOnly = true)
-    //* evita colocar las excepciones que puede lanzar el metodo
     @SneakyThrows
     public List<InventoryResponse> isInStock(List<String> skuCode){
-        //* estamos recorriendo el metodo que devuelve un objeto completo de inventory
-        //* recorremos cada posicion, y lo convertimos en el id, y si existe o no
-        //* retornamos lista de objetos con id y boolean
         log.info("Cheking inventory");
         //* aca definimos que duerma por 10 segundos
         //*Thread.sleep(10000);

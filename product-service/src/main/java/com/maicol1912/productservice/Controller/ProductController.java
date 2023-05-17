@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/product")
-//* crea los constructores para las inyecciones de dependencias
 @RequiredArgsConstructor
 public class ProductController {
 
