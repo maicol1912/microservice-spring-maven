@@ -7,14 +7,13 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
-//* se debe usar webFlux ya que spring cloud esta creado en spring webflux
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
-    //* se implementa una interfaz y se le da un manejo a esta, con este bean la toma como configuracion de como comportarse
+
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity serverHttpSecurity){
-        //* la primera configuracion desabilitamos el csrf que no es necesario si se usa con JWT
+        //* la primera configuracion desabilitamos el csrf que no es necesario si se usa con JWTa
         serverHttpSecurity.csrf()
                           .disable()
                 .authorizeExchange(exchange  -> exchange

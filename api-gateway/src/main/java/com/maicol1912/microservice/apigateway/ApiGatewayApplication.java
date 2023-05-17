@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
-//* para activarlo como cliente
 @EnableEurekaClient
 public class ApiGatewayApplication {
     public static void main(String[] args) {
