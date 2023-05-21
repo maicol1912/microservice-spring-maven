@@ -1,0 +1,14 @@
+eureka:
+  client:
+    fetch-registry: 'false'
+    register-with-eureka: 'false'
+  username: ${EUREKA_USERNAME:eureka}
+  password: ${EUREKA_PASSWORD:password}
+spring:
+  zipkin:
+    base-url: http://localhost:9411
+  sleuth:
+    sampler:
+      probability: '1.0'
+server:
+  port: '8761'
